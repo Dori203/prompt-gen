@@ -278,7 +278,7 @@ def generate_prompt(spotify_info, wiki_info):
     mood = scale_to_word(spotify_info['valence'], valence_scale)
 
     # Determine if it's instrumental
-    instrumental = "instrumental" if spotify_info.get('instrumentalness', 0) > 0.5 else ""
+    instrumental = "instrumental," if spotify_info.get('instrumentalness', 0) > 0.5 else ""
 
     # Extract artist type from Wikipedia description
     artist_type = "artist"  # Default value
@@ -286,7 +286,7 @@ def generate_prompt(spotify_info, wiki_info):
 
         artist_type = extract_artist_type_from_description(wiki_info['description'])
 
-    prompt = f"{decade} {genres}, {instrumental}, {artist_type}, {spotify_info['tempo']} bpm, {energy}, {mood}, {danceability}, {spotify_info['key']} {spotify_info['mode']} key"
+    prompt = f"{decade} {genres}, {instrumental} {artist_type}, {spotify_info['tempo']} bpm, {energy}, {mood}, {danceability}, {spotify_info['key']} {spotify_info['mode']} key"
 
     return prompt.strip()
 
@@ -357,11 +357,17 @@ st.markdown("""
 # Add background image
 add_bg_from_local('background.jpg')  # Replace with your image path
 
+# Input row
+col1, col2 = st.columns([3, 1])
+with col1:
+    search_query = st.text_input("", placeholder="Enter song name (and artist)")
+with col2:
+    generate_button = st.button("Generate")
 
-search_query = st.text_input("Enter the song name (and optionally the artist):")
+# search_query = st.text_input("Enter the song name (and optionally the artist):")
 
 # In the Streamlit UI section, update the prompt display:
-if st.button("Generate Prompt"):
+if generate_button:
     if search_query:
         with st.spinner("Fetching information..."):
             spotify_info = get_spotify_track_info(search_query)
@@ -389,11 +395,15 @@ if st.button("Generate Prompt"):
             
             # Generate and display prompt
             prompt = generate_prompt(spotify_info, wiki_info)
-            st.text_area("Prompt for Generative AI", prompt, height=100)
-            
-            # Create and display the copy button
-            copy_button = create_copy_button(prompt)
-            components.html(copy_button, height=50)
+
+            # Display the prompt and copy button
+            st.subheader("Generated Prompt")
+            col1, col2 = st.columns([3, 1])
+            with col1:
+                st.text_area("", prompt, height=100, key="prompt_area")
+            with col2:
+                copy_button = create_copy_button(prompt)
+                components.html(copy_button, height=50)
 
         else:
             st.error("Could not find the specified track on Spotify.")
