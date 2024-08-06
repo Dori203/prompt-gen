@@ -285,7 +285,7 @@ def generate_prompt(spotify_info, wiki_info):
 
         artist_type = extract_artist_type_from_description(wiki_info['description'])
 
-    prompt = f"a {decade} {genres}, {instrumental} song, {artist_type}, {spotify_info['tempo']} bpm, {energy}, {mood}, {danceability}, {spotify_info['key']} {spotify_info['mode']} key"
+    prompt = f"{decade} {genres}, {instrumental}, {artist_type}, {spotify_info['tempo']} bpm, {energy}, {mood}, {danceability}, {spotify_info['key']} {spotify_info['mode']} key"
 
     return prompt.strip()
 
