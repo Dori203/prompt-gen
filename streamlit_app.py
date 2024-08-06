@@ -424,3 +424,20 @@ st.markdown("""
     </style>
     <div class="footer">AI Prompt Generator</div>
     """, unsafe_allow_html=True)
+
+st.markdown("""
+    <style>
+    .stTextInput > div > div > input {
+        height: 46px;
+        margin-top: 0px;
+    }
+    .stButton > button {
+        height: 46px;
+        margin-top: 0px;
+    }
+    div[data-testid="column"] {
+        display: flex;
+        align-items: center;
+    }
+    </style>
+    """, unsafe_allow_html=True)
