@@ -1,4 +1,5 @@
 streamlit
+wikipedia
 wikipedia-api
 beautifulsoup4
 spotipy
