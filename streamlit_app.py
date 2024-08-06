@@ -7,6 +7,7 @@ from spotipy.oauth2 import SpotifyClientCredentials
 import datetime
 import random
 import base64
+import streamlit.components.v1 as components
 
 
 # Spotify API setup
@@ -308,6 +309,27 @@ def add_bg_from_local(image_file):
     unsafe_allow_html=True
     )
 
+# Add this function to create the copy button
+def create_copy_button(text):
+    button_id = "copy_button"
+    js_code = f"""
+        <script>
+        function copyToClipboard() {{
+            const text = `{text}`;
+            navigator.clipboard.writeText(text).then(() => {{
+                document.getElementById('{button_id}').innerText = 'Copied!';
+                setTimeout(() => {{
+                    document.getElementById('{button_id}').innerText = 'Copy';
+                }}, 2000);
+            }}).catch(err => {{
+                console.error('Failed to copy: ', err);
+            }});
+        }}
+        </script>
+        <button id="{button_id}" onclick="copyToClipboard()">Copy</button>
+    """
+    return js_code
+
 # Custom CSS for purple and neon green theme
 st.markdown("""
     <style>
@@ -369,6 +391,10 @@ if st.button("Generate Prompt"):
             prompt = generate_prompt(spotify_info, wiki_info)
             st.text_area("Prompt for Generative AI", prompt, height=100)
             
+            # Create and display the copy button
+            copy_button = create_copy_button(prompt)
+            components.html(copy_button, height=50)
+
         else:
             st.error("Could not find the specified track on Spotify.")
     else:
