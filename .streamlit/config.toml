@@ -1,4 +1,4 @@
 [theme]
-primaryColor = black
-textColor = black
+primaryColor = "black"
+textColor = "black"
 backgroundColor = "black"
